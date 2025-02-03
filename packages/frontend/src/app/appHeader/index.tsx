@@ -1,5 +1,6 @@
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
+import { createOrUpdateVacancy } from '../api/http.ts';
 
 const Header = styled('div')`
   display: flex;
@@ -9,19 +10,6 @@ const Header = styled('div')`
 `;
 
 export const AppHeader: React.FC = () => {
-	const onClick = async () => {
-		const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-
-		if (tab.id === undefined) {
-			throw Error();
-		}
-
-		const res = await chrome.tabs.sendMessage(tab.id, {
-			action: 'fullBodyParse',
-		});
-		console.log(res);
-	};
-
 	const onClickHH = async () => {
 		const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
@@ -29,10 +17,16 @@ export const AppHeader: React.FC = () => {
 			throw Error();
 		}
 
-		const res = await chrome.tabs.sendMessage(tab.id, {
+		const { parsedInfo } = await chrome.tabs.sendMessage(tab.id, {
 			action: 'parseVacancyHh',
 		});
-		console.log(res);
+
+		try {
+			const { data } = await createOrUpdateVacancy(parsedInfo);
+			console.log(data);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	const onClickResumeHH = async () => {
@@ -42,15 +36,15 @@ export const AppHeader: React.FC = () => {
 			throw Error();
 		}
 
-		const res = await chrome.tabs.sendMessage(tab.id, {
+		const { parsedInfo } = await chrome.tabs.sendMessage(tab.id, {
 			action: 'parseResumeHh',
 		});
-		console.log(res);
+
+		console.log(parsedInfo);
 	};
 
 	return (
 		<Header>
-			<Button onClick={onClick}>full parse</Button>
 			<Button onClick={onClickHH}>vacancy hh</Button>
 			<Button onClick={onClickResumeHH}>resume hh</Button>
 		</Header>
