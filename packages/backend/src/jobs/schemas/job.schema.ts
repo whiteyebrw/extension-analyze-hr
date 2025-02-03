@@ -1,30 +1,20 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema } from 'mongoose';
+import { Resume } from './resume.schema';
+import { Vacancy } from './vacancy.schema';
 
 export type JobDocument = HydratedDocument<Job>;
 
 @Schema()
 export class Job {
-	@Prop({ required: true })
-	platform: string;
+	@Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Vacancy', required: true })
+	vacancy: Vacancy;
+
+	@Prop({ type: [{ type: MongooseSchema.Types.ObjectId, ref: 'Resume' }], required: true })
+	resumes: Resume[];
 
 	@Prop({ required: true })
-	title: string;
-
-	@Prop()
-	description: string;
-
-	@Prop()
-	companyName: string;
-
-	@Prop()
-	location: string;
-
-	@Prop([String])
-	requirements: string[];
-
-	@Prop({ type: Object }) // Для специфичных данных платформ
-	customData: Record<string, any>;
+	result: string;
 
 	@Prop({ default: Date.now })
 	createdAt: Date;
