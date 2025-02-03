@@ -1,4 +1,5 @@
 import { getUrlForEntity } from '../../utils/getUrlForEntity.ts';
+import { normalizeHHUrl } from '../../utils/normalizeHHUrl.ts';
 
 export const parseResumeHh = () => {
 	const resumeInfo: any = {
@@ -7,7 +8,7 @@ export const parseResumeHh = () => {
 		education: [],
 		additionalEducation: []
 	};
-	resumeInfo.url = getUrlForEntity();
+	resumeInfo.url = normalizeHHUrl(getUrlForEntity());
 	resumeInfo.gender = (document.querySelector('[data-qa="resume-personal-gender"]') as HTMLElement)?.innerText ?? '';
 	resumeInfo.age = (document.querySelector('[data-qa="resume-personal-age"]') as HTMLElement)?.innerText ?? '';
 	resumeInfo.position = (document.querySelector('[data-qa="resume-block-title-position"]') as HTMLElement)?.innerText ?? '';
