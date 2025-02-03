@@ -1,3 +1,5 @@
+import { getUrlForEntity } from '../../utils/getUrlForEntity.ts';
+
 export const parseResumeHh = () => {
 	const resumeInfo: any = {
 		skills: [],
@@ -5,6 +7,7 @@ export const parseResumeHh = () => {
 		education: [],
 		additionalEducation: []
 	};
+	resumeInfo.url = getUrlForEntity();
 	resumeInfo.gender = (document.querySelector('[data-qa="resume-personal-gender"]') as HTMLElement)?.innerText ?? '';
 	resumeInfo.age = (document.querySelector('[data-qa="resume-personal-age"]') as HTMLElement)?.innerText ?? '';
 	resumeInfo.position = (document.querySelector('[data-qa="resume-block-title-position"]') as HTMLElement)?.innerText ?? '';
