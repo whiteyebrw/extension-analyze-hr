@@ -1,6 +1,6 @@
 import { styled } from '@mui/system';
 import { Button } from '@mui/material';
-import { createOrUpdateVacancy } from '../api/http.ts';
+import { createOrUpdateResume, createOrUpdateVacancy } from '../api/http.ts';
 
 const Header = styled('div')`
   display: flex;
@@ -40,7 +40,12 @@ export const AppHeader: React.FC = () => {
 			action: 'parseResumeHh',
 		});
 
-		console.log(parsedInfo);
+		try {
+			const { data } = await createOrUpdateResume(parsedInfo);
+			console.log(data);
+		} catch (e) {
+			console.log(e);
+		}
 	};
 
 	return (
