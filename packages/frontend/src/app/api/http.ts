@@ -1,9 +1,9 @@
-import { api } from './index.ts';
+import { useApi } from './index.ts';
 
 export const createOrUpdateVacancy = (body: any) => {
-	return api.post('/jobs/vacancy', body)
+	return useApi('/jobs/vacancy').post(body)
 }
 
 export const createOrUpdateResume = (body: any) => {
-	return api.post('/jobs/resume', body)
+	return useApi('/jobs/resume').post(body)
 }

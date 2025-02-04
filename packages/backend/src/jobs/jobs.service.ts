@@ -93,6 +93,7 @@ export class JobsService {
 			id: job._id.toString(),
 			vacancyUrl: job.vacancy.url,
 			resumeUrls: job.resumes.map(resume => resume.url),
+			result: job.result
 		};
 	}
 }

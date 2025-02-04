@@ -9,16 +9,12 @@ import { CreateJobDto } from './dto/job.dto';
 
 @Controller('jobs')
 export class JobsController {
-	constructor(private readonly jobsService: JobsService) {}
+	constructor(private readonly jobsService: JobsService) {
+	}
 
 	@Get()
 	async findAll(): Promise<{ id: string }[]> {
 		return this.jobsService.findAllIds();
-	}
-
-	@Get(':id')
-	async findById(@Param('id') id: string) {
-		return this.jobsService.findById(id);
 	}
 
 	@Post()
@@ -44,5 +40,10 @@ export class JobsController {
 	@Get('resume')
 	async findAllResume(): Promise<Resume[]> {
 		return this.jobsService.findAllResume();
+	}
+
+	@Get(':id')
+	async findById(@Param('id') id: string) {
+		return this.jobsService.findById(id);
 	}
 }

@@ -1,5 +1,8 @@
-import axios from "axios";
+import { createFetch } from '@vueuse/core';
 
-export const api = axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL,
-});
+export const useApi = createFetch({
+	baseUrl: import.meta.env.VITE_API_BASE_URL,
+	fetchOptions: {
+		mode: 'cors',
+	},
+})
