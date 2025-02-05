@@ -1,10 +1,16 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 import { useApi } from '@/app/api';
-import { normalizeHHUrl } from '@/utils/normalizeHHUrl.ts';
 import { useRouter } from 'vue-router';
 
 const MAX_LENGTH_RESUME = 5;
+
+const normalizeHHUrl = (url: string): string => {
+	const parsedUrl = new URL(url);
+	parsedUrl.hostname = 'hh.ru';
+
+	return parsedUrl.origin + parsedUrl.pathname;
+};
 
 interface Props {
 	vacancyUrl?: string;
@@ -40,18 +46,12 @@ const onFormSubmit = async () => {
 </script>
 
 <template>
-	<div>
-		<form @submit.prevent="onFormSubmit">
-			<div>
-				<InputText v-model="state.vacancyUrl" name="vacancy" type="text" placeholder="Vacancy" fluid/>
-			</div>
-			<div>
-				<InputText v-for="(_, idx) in state.resumeUrls" :key="idx" v-model="state.resumeUrls[idx]"
-									 :name="`resume${idx}`"
-									 type="text"
-									 :placeholder="`Resume ${idx}`" fluid/>
-			</div>
-			<Button :loading="isLoading" type="submit" severity="secondary" label="Submit"/>
-		</form>
-	</div>
+	<form @submit.prevent="onFormSubmit" class="flex flex-col gap-2.5">
+		<InputText v-model="state.vacancyUrl" name="vacancy" type="text" placeholder="Vacancy" fluid/>
+		<InputText v-for="(_, idx) in state.resumeUrls" :key="idx" v-model="state.resumeUrls[idx]"
+							 :name="`resume${idx+1}`"
+							 type="text"
+							 :placeholder="`Resume ${idx+1}`" fluid/>
+		<Button :loading="isLoading" type="submit" severity="secondary" label="Submit"/>
+	</form>
 </template>

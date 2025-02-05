@@ -6,8 +6,10 @@ import ButtonParseResume from '@/app/appHeader/ButtonParseResume.vue';
 <template>
 	<Menubar>
 		<template #start>
-			<ButtonParseVacancy/>
-			<ButtonParseResume/>
+			<div class="flex gap-1">
+				<ButtonParseVacancy/>
+				<ButtonParseResume/>
+			</div>
 		</template>
 	</Menubar>
 </template>

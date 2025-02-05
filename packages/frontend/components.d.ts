@@ -11,16 +11,12 @@ declare module 'vue' {
     Breadcrumbs: typeof import('./src/components/Breadcrumbs.vue')['default']
     Button: typeof import('primevue/button')['default']
     Card: typeof import('primevue/card')['default']
-    Fieldset: typeof import('primevue/fieldset')['default']
-    Form: typeof import('@primevue/forms/form')['default']
     InputText: typeof import('primevue/inputtext')['default']
     JobForm: typeof import('./src/components/JobForm.vue')['default']
     Menu: typeof import('primevue/menu')['default']
     Menubar: typeof import('primevue/menubar')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-  }
-  export interface ComponentCustomProperties {
-    Ripple: typeof import('primevue/ripple')['default']
+    ScrollPanel: typeof import('primevue/scrollpanel')['default']
   }
 }

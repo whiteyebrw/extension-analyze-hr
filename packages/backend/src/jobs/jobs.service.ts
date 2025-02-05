@@ -7,12 +7,14 @@ import { Vacancy, VacancyDocument } from './schemas/vacancy.schema';
 import { Resume, ResumeDocument } from './schemas/resume.schema';
 import { CreateResumeDto } from './dto/resume.dto';
 import { CreateJobDto } from './dto/job.dto';
+import { LlmService } from './llm.service';
 
 @Injectable()
 export class JobsService {
 	constructor(@InjectModel(Job.name) private jobModel: Model<JobDocument>,
 							@InjectModel(Vacancy.name) private vacancyModel: Model<VacancyDocument>,
-							@InjectModel(Resume.name) private resumeModel: Model<ResumeDocument>) {
+							@InjectModel(Resume.name) private resumeModel: Model<ResumeDocument>,
+							private readonly llmService: LlmService) {
 	}
 
 	async createJob(createJobDto: CreateJobDto): Promise<Job> {
@@ -31,10 +33,13 @@ export class JobsService {
 			throw new NotFoundException(`Не найдены следующие резюме: ${missingResumes.join(', ')}`);
 		}
 
+		const prompt = this.generatePrompt(vacancy, resumes);
+		const resultAnalyze = await this.llmService.generateText(prompt)
+
 		const job = new this.jobModel({
 			vacancy: vacancy._id,
 			resumes: resumes.map(resume => resume._id),
-			result: 'result',
+			result: resultAnalyze.content,
 		});
 
 		await job.save();
@@ -95,5 +100,46 @@ export class JobsService {
 			resumeUrls: job.resumes.map(resume => resume.url),
 			result: job.result
 		};
+	}
+
+	private generatePrompt(vacancy: Vacancy, candidates: Resume[]): string {
+		return `
+Ты — аналитик по подбору персонала. Твоя задача — проанализировать, какие из предложенных кандидатов наиболее соответствуют вакансии.
+
+### **Вакансия:**
+- **Заголовок:** ${vacancy.title}
+- **Зарплата:** ${vacancy.salary ?? 'Не указано'}
+- **Опыт:** ${vacancy.experience ?? 'Не указано'}
+- **Описание:** ${vacancy.description}
+- **Навыки:** ${vacancy.skills.join(', ')}
+- **Адрес:** ${vacancy.address ?? 'Не указан'}
+
+### **Кандидаты:**
+${candidates.map((candidate, index) => `
+#### **Кандидат ${index + 1}:**
+- **ФИО:** ${candidate.url}
+- **Пол:** ${candidate.gender ?? 'Не указан'}
+- **Возраст:** ${candidate.age ?? 'Не указан'}
+- **Должность:** ${candidate.position}
+- **Желаемая зарплата:** ${candidate.salary ?? 'Не указана'}
+- **Навыки:** ${candidate.skills.join(', ')}
+- **Опыт работы:**
+  ${candidate.experience.map(exp => `• ${exp.position} в ${exp.companyName} (${exp.duration})`).join('\n  ')}
+- **Образование:** 
+  ${candidate.education.map(ed => `• ${ed.name}, ${ed.organization} (${ed.graduationYear})`).join('\n  ')}
+`).join('\n')}
+
+### **Задача:**
+1. Сравни требования вакансии с данными кандидатов.
+2. Оцени соответствие каждого кандидата:
+   - Опыт (релевантность, продолжительность)
+   - Навыки (соответствие требованиям)
+   - Образование (релевантность)
+   - Зарплатные ожидания (совпадают ли)
+   - Локация (насколько совпадает)
+3. Отсортируй кандидатов по уровню соответствия.
+4. Дай развернутый анализ каждого кандидата: сильные и слабые стороны.
+5. Выведи итоговый рейтинг (от самого подходящего до наименее подходящего).
+    `;
 	}
 }

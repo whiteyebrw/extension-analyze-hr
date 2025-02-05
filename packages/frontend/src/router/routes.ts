@@ -1,9 +1,11 @@
+import type { RouteRecordRaw } from 'vue-router';
+
 const HomeView = () => import('@/views/HomeView/HomeView.vue');
 const JobsView = () => import('@/views/JobsView/JobsView.vue');
 const JobCreateView = () => import('@/views/JobCreateView/JobCreateView.vue');
 const JobDetailView = () => import('@/views/JobDetailView/JobDetailView.vue');
 
-export const routes = [
+export const routes:  Readonly<RouteRecordRaw[]> = [
 	{
 		path: '/',
 		name: 'home',

@@ -7,10 +7,10 @@ const { data } = await useApi('/jobs').json();
 const items = ref([
 	{
 		label: 'Создать новый анализ',
-		icon: 'pi pi-palette',
+		icon: 'pi pi-plus',
 		route: '/jobs/create'
 	},
-	...data.value.map(({ id }) => ({ label: id, icon: 'pi pi-palette', route: `/jobs/${id}` }))
+	...data.value.map(({ id }) => ({ label: id, icon: 'pi pi-briefcase', route: `/jobs/${id}` }))
 ]);
 </script>
 

@@ -10,8 +10,8 @@ const home = {
 </script>
 
 <template>
-	<div v-if="route.meta.breadcrumbs" class="card flex justify-center">
-		<Breadcrumb :home="home" :model="route.meta.breadcrumbs">
+	<div v-if="route.meta.breadcrumbs" class="card flex">
+		<Breadcrumb :home="home" :model="route.meta.breadcrumbs" class="!p-0">
 			<template #item="{ item, props }">
 				<router-link v-slot="{ href, navigate }" :to="item.route" custom>
 					<a :href="href" v-bind="props.action" @click="navigate">

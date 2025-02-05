@@ -2,7 +2,7 @@
 const items = [
 	{
 		label: 'Анализы вакансий',
-		icon: 'pi pi-palette',
+		icon: 'pi pi-briefcase',
 		route: '/jobs'
 	},
 ];

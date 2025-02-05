@@ -1,4 +1,5 @@
 import './assets/base.css';
+import 'primeicons/primeicons.css'
 
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -10,9 +11,13 @@ const app = createApp(App);
 
 app.use(PrimeVue, {
 	theme: {
-		preset: Aura
+		preset: Aura,
+		options: {
+			darkModeSelector: false || 'none',
+		}
 	}
 });
 app.use(router);
 
 app.mount('#app');
+router.push('/');
