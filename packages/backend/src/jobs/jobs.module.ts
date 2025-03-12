@@ -5,7 +5,6 @@ import { JobsController } from './jobs.controller';
 import { Job, JobSchema } from './schemas/job.schema';
 import { Vacancy, VacancySchema } from './schemas/vacancy.schema';
 import { Resume, ResumeSchema } from './schemas/resume.schema';
-import { LlmService } from './llm.service';
 
 @Module({
 	imports: [MongooseModule.forFeature([
@@ -23,7 +22,7 @@ import { LlmService } from './llm.service';
 		}
 	])],
 	controllers: [JobsController],
-	providers: [JobsService, LlmService],
+	providers: [JobsService],
 })
 export class JobsModule {
 }

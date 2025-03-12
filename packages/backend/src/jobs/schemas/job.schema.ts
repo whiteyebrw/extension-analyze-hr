@@ -5,6 +5,14 @@ import { Vacancy } from './vacancy.schema';
 
 export type JobDocument = HydratedDocument<Job>;
 
+class MatchedResume {
+	@Prop()
+	id: string;
+
+	@Prop()
+	match_percentage: number;
+}
+
 @Schema()
 export class Job {
 	@Prop({ type: MongooseSchema.Types.ObjectId, ref: 'Vacancy', required: true })
@@ -14,7 +22,7 @@ export class Job {
 	resumes: Resume[];
 
 	@Prop({ required: true })
-	result: string;
+	matchedResumes: MatchedResume
 
 	@Prop({ default: Date.now })
 	createdAt: Date;
